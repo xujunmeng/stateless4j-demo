@@ -1,0 +1,6 @@
+server:
+  port: 20001
+  servlet:
+    session:
+      cookie:
+        name: STATELESS4J_SESSION
