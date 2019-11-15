@@ -20,32 +20,15 @@ import java.util.concurrent.TimeUnit;
 public class PhoneCallStateMachineContext {
 
     @Getter
-    private int callTime = 0;
+    private final ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
     @Getter
-    private ThreadPoolTaskExecutor executor;
+    private int callTime = 0;
     private volatile boolean stopTimer = false;
 
+    /**
+     * 状态机上下文构造函数
+     */
     public PhoneCallStateMachineContext() {
-        this.init();
-        StateMachineConfig<State, Trigger> phoneCallConfig = new StateMachineConfig<>();
-
-        phoneCallConfig.configure(State.OffHook)
-                .permit(Trigger.CallDialed, State.Ringing);
-
-        phoneCallConfig.configure(State.Ringing)
-                .permit(Trigger.HungUp, State.OffHook)
-                .permit(Trigger.CallConnected, State.Connected);
-
-        phoneCallConfig.configure(State.Connected)
-                .onEntry(this::startCallTimer)
-                .onExit(this::stopCallTimer)
-                .permit(Trigger.LeftMessage, State.OffHook)
-                .permit(Trigger.HungUp, State.OffHook)
-                .permit(Trigger.PlacedOnHold, State.OnHold);
-    }
-
-    private void init() {
-        executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(8);
         executor.setMaxPoolSize(16);
         executor.setQueueCapacity(100);
@@ -54,6 +37,9 @@ public class PhoneCallStateMachineContext {
         executor.initialize();
     }
 
+    /**
+     * @return 返回一个状态机实例
+     */
     public StateMachine<State, Trigger> stateMachine() {
         StateMachineConfig<State, Trigger> phoneCallConfig = new StateMachineConfig<>();
 

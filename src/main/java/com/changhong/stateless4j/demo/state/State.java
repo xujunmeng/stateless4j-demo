@@ -7,8 +7,20 @@ package com.changhong.stateless4j.demo.state;
  */
 public enum State {
 
+    /**
+     * 摘机
+     */
     OffHook,
+    /**
+     * 振铃
+     */
     Ringing,
+    /**
+     * 通话中
+     */
     Connected,
+    /**
+     * 通话保持
+     */
     OnHold
 }
