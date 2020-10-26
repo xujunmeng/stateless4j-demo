@@ -19,7 +19,7 @@ public class Phone {
     @Getter
     private String number; // 电话号码
 
-    private State state = State.OffHook;
+    private State state = State.摘机状态;
 
     public Phone(String number) {
         this.number = number;
@@ -27,8 +27,8 @@ public class Phone {
 
     public void callDialed() {
         switch (state) {
-            case OffHook:
-                state = State.Ringing;
+            case 摘机状态:
+                state = State.振铃状态;
                 break;
             default:
                 throw new IllegalStateException("电话不在摘机状态，拨打无效");
@@ -38,14 +38,14 @@ public class Phone {
 
     public void hangup() {
         switch (state) {
-            case Ringing:
-                state = State.OffHook;
+            case 振铃状态:
+                state = State.摘机状态;
                 break;
-            case Connected:
-                state = State.OffHook;
+            case 通话中状态:
+                state = State.摘机状态;
                 break;
-            case OnHold:
-                state = State.OffHook;
+            case 通话保持状态:
+                state = State.摘机状态;
                 break;
             default:
                 throw new IllegalStateException("电话尚未接通，挂断无效");
@@ -55,8 +55,8 @@ public class Phone {
 
     public void callConnected() {
         switch (state) {
-            case Ringing:
-                state = State.Connected;
+            case 振铃状态:
+                state = State.通话中状态;
                 break;
             default:
                 throw new IllegalStateException("电话不在振铃状态，接听无效");

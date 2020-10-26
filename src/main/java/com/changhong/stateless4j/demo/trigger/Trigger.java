@@ -10,25 +10,25 @@ public enum Trigger {
     /**
      * 来电
      */
-    CallDialed,
+    来电事件,
     /**
      * 语音留言
      */
-    HungUp,
+    挂断电话事件,
     /**
      * 接听
      */
-    CallConnected,
+    接听事件,
     /**
      * 语音留言
      */
-    LeftMessage,
+    语音留言事件,
     /**
      * 保持
      */
-    PlacedOnHold,
+    通话保持事件,
     /**
      * 取消保持
      */
-    TakenOffHold
+    取消通话保持事件
 }

@@ -43,27 +43,27 @@ public class PhoneCallStateMachineContext {
     public StateMachine<State, Trigger> stateMachine() {
         StateMachineConfig<State, Trigger> phoneCallConfig = new StateMachineConfig<>();
 
-        phoneCallConfig.configure(State.OffHook)
+        phoneCallConfig.configure(State.摘机状态)
                 .onEntry(this::resetCallTimer)
-                .permit(Trigger.CallDialed, State.Ringing);
+                .permit(Trigger.来电事件, State.振铃状态);
 
-        phoneCallConfig.configure(State.Ringing)
-                .permit(Trigger.HungUp, State.OffHook)
-                .permit(Trigger.CallConnected, State.Connected);
+        phoneCallConfig.configure(State.振铃状态)
+                .permit(Trigger.挂断电话事件, State.摘机状态)
+                .permit(Trigger.接听事件, State.通话中状态);
 
-        phoneCallConfig.configure(State.Connected)
+        phoneCallConfig.configure(State.通话中状态)
                 .onEntry(this::startCallTimer)
                 .onExit(this::stopCallTimer)
-                .permit(Trigger.LeftMessage, State.OffHook)
-                .permit(Trigger.HungUp, State.OffHook)
-                .permit(Trigger.PlacedOnHold, State.OnHold);
+                .permit(Trigger.语音留言事件, State.摘机状态)
+                .permit(Trigger.挂断电话事件, State.摘机状态)
+                .permit(Trigger.通话保持事件, State.通话保持状态);
 
-        phoneCallConfig.configure(State.OnHold)
-                .substateOf(State.Connected)
-                .permit(Trigger.TakenOffHold, State.Connected)
-                .permit(Trigger.HungUp, State.OffHook);
+        phoneCallConfig.configure(State.通话保持状态)
+                .substateOf(State.通话中状态)
+                .permit(Trigger.取消通话保持事件, State.通话中状态)
+                .permit(Trigger.挂断电话事件, State.摘机状态);
 
-        return new StateMachine<>(State.OffHook, phoneCallConfig);
+        return new StateMachine<>(State.摘机状态, phoneCallConfig);
     }
 
     private void startCallTimer() {

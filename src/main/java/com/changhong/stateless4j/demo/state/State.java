@@ -10,17 +10,17 @@ public enum State {
     /**
      * 摘机
      */
-    OffHook,
+    摘机状态,
     /**
      * 振铃
      */
-    Ringing,
+    振铃状态,
     /**
      * 通话中
      */
-    Connected,
+    通话中状态,
     /**
      * 通话保持
      */
-    OnHold
+    通话保持状态
 }
